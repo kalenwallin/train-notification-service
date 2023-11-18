@@ -1,0 +1,19 @@
+{
+  "dependencies": {
+    "@google-cloud/vision": "^4.0.2",
+    "dotenv": "^16.3.1",
+    "fastify": "^4.24.3",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.9.1",
+    "pino-pretty": "^10.2.3",
+    "typescript": "^5.2.2"
+  },
+  "type": "module",
+  "scripts": {
+    "start": "tsc && node dist/index.js",
+    "clean": "rm -r dist && tsc",
+    "dev": "nodemon -e ts --exec \"yarn start || exit 1\""
+  }
+}

@@ -1,0 +1,38 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Rail Alert
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <img src="assets/rail-alert.png" />
+
+  <ion-item>
+    <ion-select placeholder="City, State" (ionChange)="updateLocation($event)">
+      <div slot="label">Select Location</div>
+      <ion-select-option value="apple">Lincoln, NE</ion-select-option>
+      <ion-select-option value="banana">Fremont, NE</ion-select-option>
+      <ion-select-option value="orange">Omaha, NE</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-list inset>
+
+    <ion-item *ngFor="let node of nodes">
+      <ion-label>
+        <h1>{{ node.title }}</h1>
+        <p>Last updated: {{ node.created_at }}</p>
+      </ion-label>
+      <ion-icon aria-hidden="true" name="star" slot="end" (click)="toggleNode(node.id)" [class.favoriteNode]="isFavoriteNode(node.id)"></ion-icon>
+    </ion-item>
+
+  </ion-list>
+
+  <ion-button size="block" color="clear" (click)="getNotification()">?</ion-button>
+</ion-content>
