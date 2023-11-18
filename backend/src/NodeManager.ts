@@ -1,3 +1,5 @@
+import fs from 'fs/promises'
+
 export enum NodeState {
     Unknown,
     Clear,
@@ -10,10 +12,19 @@ export interface NodeData {
 }
 export default class NodeManager {
     // List of recently pushed endpoint data
-    #nodes: Map<number, NodeData>
+    #nodes: Map<number, NodeData> = new Map()
 
     constructor() {
+        this.loadData()
+    }
 
+    async loadData() {
+        const data = await fs.readFile('./data/nodes.json', 'utf-8')
+        const json = JSON.parse(data)
+        for(const node of json.nodes) {
+            console.log(node)
+            this.#nodes.set(node.id, node)
+        }
     }
 
     setState(id: number, state: NodeState) {
@@ -37,6 +48,10 @@ export default class NodeManager {
     }
 
     getNodesAll() {
-        return { ... this.#nodes }
+        const kv = {}
+        for(const [id, node] of this.#nodes.entries()) {
+            kv[id] = node
+        }
+        return kv
     }
 }
