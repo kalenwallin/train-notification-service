@@ -11,7 +11,7 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <img src="assets/rail-alert.png" />
+  <img src="assets/rail-alert.png" width="500px" />
 
   <ion-item>
     <ion-select placeholder="City, State" (ionChange)="updateLocation($event)">
@@ -29,7 +29,8 @@
         <h1>{{ node.title }}</h1>
         <p>Last updated: {{ node.created_at }}</p>
       </ion-label>
-      <ion-icon aria-hidden="true" name="star" slot="end" (click)="toggleNode(node.id)" [class.favoriteNode]="isFavoriteNode(node.id)"></ion-icon>
+      <ion-icon aria-hidden="true" name="star" slot="end" (click)="toggleNode(node.id)"
+        [class.favoriteNode]="isFavoriteNode(node.id)"></ion-icon>
     </ion-item>
 
   </ion-list>
