@@ -9,38 +9,39 @@ export interface Node {
   created_at: Date;
 }
 
+interface APINode {
+  title: string,
+  state: NodeState,
+  created_at: number
+}
+export enum NodeState {
+  Unknown,
+  Clear,
+  Detection
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
-  public nodes: Node[] = [
-    {
-      id: 1,
-      title: "Broad Street",
-      blocked: true,
-      created_at: new Date()
-    },
-    {
-      id: 2,
-      title: "South Carvin Dr.",
-      blocked: false,
-      created_at: new Date()
-    },
-    {
-      id: 3,
-      title: "Lincoln St. & Military Ave",
-      blocked: false,
-      created_at: new Date()
-    }
-  ];
+  public nodes: Node[] = []
 
   constructor(private http: HttpClient) { }
 
   public async fetchNodes(): Promise<void> {
-    const response = await firstValueFrom(this.http.get<Node[]>('https://api.example.com/data')); // TODO need to type this once we know the shape
+    const response = await firstValueFrom(this.http.get<{ nodes: Record<number, APINode> }>('http://localhost:8081/api/nodes'))
 
     if (response) {
-      this.nodes = response;
+      const nodes: Node[] = []
+      for(const [id, node] of Object.entries(response.nodes)) {
+        nodes.push({
+          id: Number(id),
+          created_at: new Date(node.created_at),
+          blocked: node.state === NodeState.Detection,
+          title: node.title
+        })
+      }
+      this.nodes = nodes
     }
   }
 

@@ -4,6 +4,7 @@ import Fastify, { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 // import { Pool } from 'mysql2/promise';
 import dotenv from 'dotenv'
 import JWT from './util/jwt-promise.js'
+import FastifyCors from '@fastify/cors'
 dotenv.config()
 
 const JWT_ENCRYPT_KEY = process.env.JWT_ENCRYPT_KEY
@@ -15,7 +16,7 @@ if(!process.env.GOOGLE_VISION_APIKEY) {
 export interface AuthPayload {
     sub: number,
     iat: number,
-    name: string,
+    title: string,
     lat: number,
     lng: number
 }
@@ -43,6 +44,9 @@ const app = Fastify({
             (process.env.NODE_ENV !== "production" ? 'debug' : 'error')
       }
 })
+app.register(FastifyCors, {
+    origin: '*'
+})
 
 declare module 'fastify' {
     export interface FastifyInstance {
@@ -53,11 +57,11 @@ declare module 'fastify' {
 
 app.decorate("em", new EndpointManager())
 
-app.get('/api/gentoken/:id/:lat/:lng', async (req: FastifyRequest<{ Params: { id: string, lat: number, lng: number }, Querystring: { name: string }}>, reply: FastifyReply): Promise<AuthPayload> => {
+app.get('/api/gentoken/:id/:lat/:lng', async (req: FastifyRequest<{ Params: { id: string, lat: number, lng: number }, Querystring: { title: string }}>, reply: FastifyReply): Promise<AuthPayload> => {
     const jwt = await JWT.sign<AuthPayload>({
         sub: Number(req.params.id),
         iat: Math.floor(Date.now() / 1000),
-        name: req.query.name || `Node #${req.params.id}`,
+        title: req.query.title || `Node #${req.params.id}`,
         lng: req.params.lng,
         lat: req.params.lat
     }, JWT_ENCRYPT_KEY)
@@ -149,5 +153,5 @@ app.get('/api/nodes/bulk/:nodeids/', async (req: FastifyRequest<{Params: { nodei
     })
 })
 
-const WEB_PORT = Number(process.env.WEB_PORT) || 8080
+const WEB_PORT = Number(process.env.WEB_PORT) || 8081
 app.listen({port: WEB_PORT}, () => console.info(`[Server] Listening on :${WEB_PORT}`))
