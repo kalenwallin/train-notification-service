@@ -23,6 +23,7 @@ export default class NodeManager {
         const json = JSON.parse(data)
         for(const node of json.nodes) {
             console.log(node)
+            node.state = NodeState.Unknown
             this.#nodes.set(node.id, node)
         }
     }

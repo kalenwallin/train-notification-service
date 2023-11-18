@@ -3,19 +3,19 @@
         {
             "id": 1,
             "title": "Broad Street",
-            "blocked": true,
+            "state": 0,
             "created_at": 1700345595430 
         },
         {
             "id": 2,
             "title": "South Carvin Dr.",
-            "blocked": true,
+            "state": 0,
             "created_at": 1700345595230 
         },
         {
             "id": 3,
             "title": "Lincoln St. & Military Ave",
-            "blocked": true,
+            "state": 0,
             "created_at": 1700245595430 
         }
     ]
