@@ -7,11 +7,11 @@ import JWT from './util/jwt-promise.js'
 import FastifyCors from '@fastify/cors'
 dotenv.config()
 
-const JWT_ENCRYPT_KEY = process.env.JWT_ENCRYPT_KEY
-if(!JWT_ENCRYPT_KEY) throw new Error('Missing required env "JWT_ENCRYPT_KEY", exiting...')
-if(!process.env.GOOGLE_VISION_APIKEY) {
-    throw new Error("Missing required env \"JWT_ENCRYPT_KEY\", exiting")
-}
+const JWT_ENCRYPT_KEY = "thisishardcoded"
+// if(!JWT_ENCRYPT_KEY) throw new Error('Missing required env "JWT_ENCRYPT_KEY", exiting...')
+// if(!process.env.GOOGLE_VISION_APIKEY) {
+//     throw new Error("Missing required env \"JWT_ENCRYPT_KEY\", exiting")
+// }
 
 export interface AuthPayload {
     sub: number,
@@ -70,7 +70,6 @@ app.get('/api/gentoken/:id/:lat/:lng', async (req: FastifyRequest<{ Params: { id
 })
 
 // image send
-import fs from 'fs'
 app.post('/api/ingest/:state', async (req: FastifyRequest<{Params: {state: number}}>, reply) => {
     try {
         const endpoint = await validateEndpoint(req.headers['authorization'])
