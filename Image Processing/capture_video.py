@@ -2,6 +2,10 @@ import cv2
 import numpy as np
 import tensorflow as tf
 
+#uses the EfficientDet model from the TF2 Model Zoo to detect objects in the webcam feed
+
+# Load the pre-trained EfficientDet model
+model = tf.saved_model.load("efficientdet_d0_coco/saved_model")
 
 def detect_objects(image):
     # Convert the image to a NumPy array
