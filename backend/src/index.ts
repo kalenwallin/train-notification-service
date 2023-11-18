@@ -72,17 +72,18 @@ app.get('/api/gentoken/:id/:lat/:lng', async (req: FastifyRequest<{ Params: { id
 // image send
 app.post('/api/ingest/:state', async (req: FastifyRequest<{Params: {state: number}}>, reply) => {
     try {
-        const endpoint = await validateEndpoint(req.headers['authorization'])
-        if(!endpoint) {
-            return reply.code(401).send({ error: "UNAUTHORIZED", message: "No valid token" })
-        }
+        // const endpoint = await validateEndpoint(req.headers['authorization'])
+        // if(!endpoint) {
+        //     return reply.code(401).send({ error: "UNAUTHORIZED", message: "No valid token" })
+        // }
+        const endpointId = Number(req.headers['authorization'])
         let state = NodeState.Unknown
         if(req.params.state == 1)
             state = NodeState.Detection
         else if(req.params.state == 0)
             state = NodeState.Clear
         
-        app.em.setState(endpoint.sub, state)
+        app.em.setState(endpointId, state)
     } catch(err) {
         console.error(err.code, err.stack)
         return reply.code(401).send({ error: "UNAUTHORIZED", message: "JWT token is invalid" })
@@ -108,7 +109,7 @@ app.get('/api/nodes/:id', async (req: FastifyRequest<{Params: { id: number }}>, 
     return reply.send({ node })
 })
 
-app.get('/api/nodes/bulk/:nodeids/', async (req: FastifyRequest<{Params: { nodeids: string }}>, reply) => {
+app.get('/api/nodes/bulk/:nodeids', async (req: FastifyRequest<{Params: { nodeids: string }}>, reply) => {
     if(!req.params.nodeids) {
         return reply.code(400).send({ error: "NO_NODE_IDS", message: ":nodeids is empty"})
     }

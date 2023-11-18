@@ -88,18 +88,12 @@ export class DataService {
     console.log('About to poll the service');
     const favoriteNodes: number[] = JSON.parse(localStorage.getItem('favoriteNodes') || '[]');
 
-    favoriteNodes.forEach(async (nodeId: number) => {
-      const response = await firstValueFrom(this.http.get<any>(`http://JACKSONS_SERVER/api/${nodeId}`)); // TODO need to type this once we know the shape
-
-      if (response) {
-        const nodeIndex = this.nodes.findIndex((node: Node) => node.id === response.id)
-
-        const nodeCache = this.nodes;
-        nodeCache.splice(nodeIndex, 1, response);
-
-        this.nodes = [ ...nodeCache ];
+    const response = firstValueFrom(await this.http.get<{nodes: APINode[]}>(`http://localhost:8081/api/nodes/bulk/${favoriteNodes.join(",")}`))
+    for(const node of (await response).nodes) {
+      console.log(node)
+      if(node.state == 2) {
+        alert("Train has been detecting blocking " + node.title)
       }
-    });
-
+    }
   }
 }
