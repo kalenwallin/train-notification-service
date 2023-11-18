@@ -72,7 +72,7 @@ while True:
                 train_found = True
                 break
         if(train_found):
-            response = requests.post(r"https://localhost:8081/api/ingest/1", headers={'Content-Type': 'application/json', 'Authorization': ''})
+            response = requests.post(r"http://localhost:8081/api/ingest/1", headers={'Content-Type': 'application/json', 'Authorization': ''})
             print(response.text)
             break
 
