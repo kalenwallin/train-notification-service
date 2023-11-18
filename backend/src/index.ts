@@ -71,53 +71,19 @@ app.get('/api/gentoken/:id/:lat/:lng', async (req: FastifyRequest<{ Params: { id
 
 // image send
 import fs from 'fs'
-app.post('/api/ingest', async (req: FastifyRequest<{Querystring: {img: string}}>, reply) => {
+app.post('/api/ingest/:state', async (req: FastifyRequest<{Params: {state: number}}>, reply) => {
     try {
-        const endpoint = {
-            id: 5
-        }
-        /*
         const endpoint = await validateEndpoint(req.headers['authorization'])
         if(!endpoint) {
             return reply.code(401).send({ error: "UNAUTHORIZED", message: "No valid token" })
-        }*/
-        const encoded = Buffer.from(fs.readFileSync('../Image Processing/' + req.query.img)).toString('base64');
-        // Vision
-        const body = {
-            requests: [{
-                image: {
-                  content: encoded
-                },
-                features: [{
-                    type: "LABEL_DETECTION",
-                    maxResults: 1
-                }]
-            }]
         }
-
-        const response = await fetch('https://vision.googleapis.com/v1/images:annotate', {
-            body: JSON.stringify(body),
-            method: "POST",
-            headers: {
-                'X-goog-api-key': process.env.GOOGLE_VISION_APIKEY
-            }
-        })
-        console.log(response.status, response.statusText)
-        const json = await response.json()
-        if(response.ok) {
-            console.log('vision', json)
-            return reply.send(json)
-        } else {
-            console.error(`[Node:${endpoint.id}] Processing Error:`, json)
-            return reply.code(500).send({
-                error: "PROCESSING_ERROR",
-                response: json
-            })
-        }
-          
-
-
-        // app.em.setState(endpoint.sub, NodeState.Clear)
+        let state = NodeState.Unknown
+        if(req.params.state == 1)
+            state = NodeState.Detection
+        else if(req.params.state == 0)
+            state = NodeState.Clear
+        
+        app.em.setState(endpoint.sub, state)
     } catch(err) {
         console.error(err.code, err.stack)
         return reply.code(401).send({ error: "UNAUTHORIZED", message: "JWT token is invalid" })
