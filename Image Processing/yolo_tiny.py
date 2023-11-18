@@ -2,16 +2,17 @@ import cv2
 import numpy as np
 
 # Load YOLO
-net = cv2.dnn.readNet("C:\Users\kalen\Downloads\yolov3-tiny.weights", "C:\Users\kalen\Downloads\yolov3-tiny.cfg")
+net = cv2.dnn.readNet(r"C:\Users\kalen\Downloads\yolov3-tiny.weights", r"C:\Users\kalen\Downloads\yolov3-tiny.cfg")
 layer_names = net.getLayerNames()
-output_layers = [layer_names[i[0] - 1] for i in net.getUnconnectedOutLayers()]
+output_layers = [layer_names[i - 1] for i in net.getUnconnectedOutLayers()]
+
 
 # Load the COCO class labels
-with open("C:\Users\kalen\Downloads\coco.names", "r") as f:
+with open(r"C:\Users\kalen\Downloads\coco.names", "r") as f:
     classes = [line.strip() for line in f.readlines()]
 
-# Initialize video capture
-cap = cv2.VideoCapture('path_to_video.mp4')
+# Initialize webcam
+cap = cv2.VideoCapture(0)  # Use 0 for default webcam
 
 while cap.isOpened():
     ret, frame = cap.read()
