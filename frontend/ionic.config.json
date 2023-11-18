@@ -1,0 +1,7 @@
+{
+  "name": "Trains A'comin",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
