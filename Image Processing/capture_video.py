@@ -1,5 +1,8 @@
+import json
+
 import cv2
 import numpy as np
+import requests
 
 # Load YOLO
 net = cv2.dnn.readNet("yolov3.weights", "yolov3.cfg")
@@ -69,9 +72,12 @@ while True:
                 train_found = True
                 break
         if(train_found):
+            response = requests.post(r"https://localhost:8081/api/ingest/1", headers={'Content-Type': 'application/json', 'Authorization': ''})
+            print(response.text)
             break
 
     if(train_found):
+        
         break
 
     # Display the frame
