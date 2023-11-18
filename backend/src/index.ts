@@ -71,7 +71,7 @@ app.get('/api/gentoken/:id/:lat/:lng', async (req: FastifyRequest<{ Params: { id
 
 // image send
 import fs from 'fs'
-app.post('/api/ingest', async (req, reply) => {
+app.post('/api/ingest', async (req: FastifyRequest<{Querystring: {img: string}}>, reply) => {
     try {
         const endpoint = {
             id: 5
@@ -81,7 +81,7 @@ app.post('/api/ingest', async (req, reply) => {
         if(!endpoint) {
             return reply.code(401).send({ error: "UNAUTHORIZED", message: "No valid token" })
         }*/
-        const encoded = Buffer.from(fs.readFileSync('../Image Processing/screenshot_object_detection.jpg')).toString('base64');
+        const encoded = Buffer.from(fs.readFileSync('../Image Processing/' + req.query.img)).toString('base64');
         // Vision
         const body = {
             requests: [{
